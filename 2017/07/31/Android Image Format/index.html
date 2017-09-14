@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="介绍Android系统中image format类型和数据格式。图形相关的image format定义在android.graphics.ImageFormat. RGB RGB代表红、绿、蓝三个颜色通道，每个点的颜色都是用这三种颜色的值叠加。 ###RGB_565   RGB565使用16位表示一个像素，这16位中的5位用于R，6位用于G，5位用于B。  每一个像素点的数据如下：  R R R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Image Format">
+<meta property="og:url" content="http://yoursite.com/2017/07/31/Android Image Format/index.html">
+<meta property="og:site_name" content="Hao&#39;Blog">
+<meta property="og:description" content="介绍Android系统中image format类型和数据格式。图形相关的image format定义在android.graphics.ImageFormat. RGB RGB代表红、绿、蓝三个颜色通道，每个点的颜色都是用这三种颜色的值叠加。 ###RGB_565   RGB565使用16位表示一个像素，这16位中的5位用于R，6位用于G，5位用于B。  每一个像素点的数据如下：  R R R">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-13T14:09:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Image Format">
+<meta name="twitter:description" content="介绍Android系统中image format类型和数据格式。图形相关的image format定义在android.graphics.ImageFormat. RGB RGB代表红、绿、蓝三个颜色通道，每个点的颜色都是用这三种颜色的值叠加。 ###RGB_565   RGB565使用16位表示一个像素，这16位中的5位用于R，6位用于G，5位用于B。  每一个像素点的数据如下：  R R R">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/31/Android Image Format/"/>
+
+
+
+
+
+  <title>Android Image Format | Hao'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hao'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/31/Android Image Format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android Image Format</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T21:30:15+08:00">
+                2017-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>介绍<strong>Android</strong>系统中image format类型和数据格式。<br>图形相关的image format定义在<a href="https://developer.android.com/reference/android/graphics/ImageFormat.html" target="_blank" rel="external">android.graphics.ImageFormat</a>.</p>
+<h2 id="RGB"><a href="#RGB" class="headerlink" title="RGB"></a>RGB</h2><blockquote>
+<p>RGB代表红、绿、蓝三个颜色通道，每个点的颜色都是用这三种颜色的值叠加。</p>
+<p>###RGB_565</p>
+<blockquote>
+<p> RGB565使用16位表示一个像素，这16位中的5位用于R，6位用于G，5位用于B。</p>
+<p> 每一个像素点的数据如下：</p>
+<p> R R R R R G G G G G G B B B B B</p>
+</blockquote>
+<h3 id="FLEX-RGB-888"><a href="#FLEX-RGB-888" class="headerlink" title="FLEX _RGB _888"></a>FLEX _RGB _888</h3><blockquote>
+<p>Mutli-plane Android RGB format, plane可以理解为平面，每一个像素点的颜色都由8位的R,G,B颜色决定。</p>
+<p>图像数据由三个独立的data buffer表示，每一个buffer代表一个颜色平面。</p>
+<p>使用plane方式存储图像数据时，存储数据使用的buffer还会保存<strong>row stride</strong>和<strong>pixel stride</strong>的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; The order of planes in the array returned by Image#getPlanes() is guaranteed such that plane #0 is always R (red), plane #1 is always G (green), and plane #2 is always B (blue).</div><div class="line">&gt; &gt; All three planes are guaranteed to have the same row strides and pixel strides.</div><div class="line">&gt; &gt;</div></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<h3 id="FLEX-RGBA-8888"><a href="#FLEX-RGBA-8888" class="headerlink" title="FLEX _RGBA _8888"></a>FLEX _RGBA _8888</h3><blockquote>
+<p>比FLEX _RGB _888多了一个alpha通道，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; The order of planes in the array returned by Image#getPlanes() is guaranteed such that plane #0 is always R (red), plane #1 is always G (green), plane #2 is always B (blue), and plane #3 is always A (alpha). This format may represent pre-multiplied or non-premultiplied alpha.</div><div class="line">&gt; &gt; All four planes are guaranteed to have the same row strides and pixel strides.</div><div class="line">&gt; &gt;</div></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>###YUV_420 _888, YUV_422 _888, YUV_444 888</p>
+<blockquote>
+<p>类似于<strong>RGB</strong>，<strong>YUV</strong>也是一种颜色编码格式，其中Y表示明亮度，U和V表示色度，浓度。</p>
+<p>YUV，YCbCr都称为YUV。</p>
+<p>YUV的存储格式有两种，一种是紧缩格式（packed format），存储方式类似于RGB，所有的值保存在一个矩阵中，每个像素点的Y,U,V值，紧挨着放在一起。另外一种是平面格式（planar format），将Y,U,V三个分量分别放在不同的矩阵中。</p>
+<p>根据每个像素点采样的不同，YUV数据又可以分为YUV420，YUV422，YUV444</p>
+<ul>
+<li>YUV444：表示完全采样，每个像素点都有自己的Y分量和UV分量。</li>
+<li>YUV422：表示水平2:1采样，垂直完全采样。每个像素点都有自己的Y分量，水平方向，每两个像素点共用UV分量。</li>
+<li>YUV420：表示水平和垂直都是2:1采样，每个像素点都有自己的Y分量，水平和垂直方向，每四个点共用UV分量。</li>
+</ul>
+</blockquote>
+<p>###NV16和NV21</p>
+<blockquote>
+<p><strong>NV16</strong>是YUV422SP，<strong>NV21</strong>是YUV420SP，Y分量是一个平面（plane），UV分量是一个平面（plane）。</p>
+<p>后缀<strong>SP</strong>的意思是Semi-Planar,表示图像数据不是分成三个平面，而是两个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; NV16 is YCbCr format, used for video. For camera, the YUV_420_888 format is recommanded for YUV output instead.</div><div class="line">&gt; &gt; NV21 is YCrCb format used for images, which uses the NV21 encoding format. This is the default format for Camera preview images, when not otherwise set with setPreviewFormat(int).</div><div class="line">&gt; &gt;</div></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>###RAW10和RAW12</p>
+<blockquote>
+<p><strong>RAW</strong>是记录图像传感器未被处理的原始图像数据。</p>
+<ul>
+<li><p><strong>RAW10</strong>表示每个像素用10bit的数据表示，具体格式如下，第五个byte会记录前面四个像素的第0bit和第1bit。</p>
+<p> | bit 7    |bit 6|bit 5|    bit 4|    bit 3|bit 2| bit 1| bit 0<br>  —| ——|——|——|——|—–|——|—–|——–<br> Byte 0:|P0[9]|    P0[8]| P0[7]    |P0[6]|P0[5]| P0[4]|P0[3]| P0[2]<br> Byte 1:|P1[9]|    P1[8]|    P1[7]    |P1[6]|P1[5]| P1[4]| P1[3]|P1[2]<br> Byte 2:|P2[9]|    P2[8]|    P2[7]    |P2[6]|P2[5]| P2[4]| P2[3]|P2[2]<br> Byte 3:|P3[9]|    P3[8]|    P3[7]    |P3[6]|P3[5]| P3[4]| P3[3]| P3[2]<br> Byte 4:|P3[1]|    P3[0]|    P2[1]    |P2[0]|P1[1]| P1[0]| P0[1]| P0[0]</p>
+</li>
+<li><p><strong>RAW12</strong>表示每个像素用12bit的数据表示，具体格式如下，第三个byte会记录前面两个像素点的第0～3位。</p>
+<p>  | bit 7   | bit 6  | bit 5  | bit 4  | bit 3  | bit 2  | bit 1  | bit 0  |<br>  | ——- | —— | —— | —— | —— | —— | —— | —— |<br>  | Byte 0: | P0[11] | P0[10] | P0[ 9] | P0[ 8] | P0[ 7] | P0[ 6] | P0[ 5] |<br>  | Byte 1: | P1[11] | P1[10] | P1[ 9] | P1[ 8] | P1[ 7] | P1[ 6] | P1[ 5] |<br>  | Byte 2: | P1[ 3] | P1[ 2] | P1[ 1] | P1[ 0] | P0[ 3] | P0[ 2] | P0[ 1] |</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="RAW-PRIVATE-和-RAW-SENOR"><a href="#RAW-PRIVATE-和-RAW-SENOR" class="headerlink" title="RAW _PRIVATE 和 RAW _SENOR"></a>RAW _PRIVATE 和 RAW _SENOR</h3><blockquote>
+<ul>
+<li><strong>RAW_PRIVATE</strong>是依赖具体实现的raw格式.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; Private raw camera sensor image format, a single channel image with implementation depedent pixel layout.</div><div class="line">&gt; &gt;</div></pre></td></tr></table></figure>
+<p>RAW_PRIVATE is a format for unprocessed raw image buffers coming from an image sensor. The actual structure of buffers of this format is implementation-dependent.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;</div><div class="line">&gt;&gt; - **RAW_SENSOR**</div><div class="line">&gt;&gt;</div><div class="line">&gt;&gt;</div></pre></td></tr></table></figure></p>
+<p>General raw camera sensor image format, usually representing a single-channel Bayer-mosaic image. Each pixel color sample is stored with 16 bits of precision.</p>
+<p>The layout of the color mosaic, the maximum and minimum encoding values of the raw pixel data, the color space of the image, and all other needed information to interpret a raw sensor image must be queried from the CameraDevice which produced the image.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;</div><div class="line">&gt;&gt;</div></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>###PRIVATE</p>
+<blockquote>
+<p>私有的，不透明的format，应用无法获得其具体的图像数据，只能通过相关接口做图像处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; &gt; Android private opaque image format.</div><div class="line">&gt; &gt;</div></pre></td></tr></table></figure>
+<p>The choices of the actual format and pixel data layout are entirely up to the device-specific and framework internal implementations, and may vary depending on use cases even for the same device. The buffers of this format can be produced by components like ImageWriter , and interpreted correctly by consumers like CameraDevice based on the device/framework private information. However, these buffers are not directly accessible to the application.</p>
+<p>When an Image of this format is obtained from an ImageReader or ImageWriter, the getPlanes() method will return an empty Plane array.</p>
+<p>If a buffer of this format is to be used as an OpenGL ES texture, the framework will assume that sampling the texture will always return an alpha value of 1.0 (i.e. the buffer contains only opaque pixel values).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;</div><div class="line">&gt;&gt;</div></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">Hao</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RGB"><span class="nav-number">1.</span> <span class="nav-text">RGB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FLEX-RGB-888"><span class="nav-number">1.1.</span> <span class="nav-text">FLEX _RGB _888</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLEX-RGBA-8888"><span class="nav-number">1.2.</span> <span class="nav-text">FLEX _RGBA _8888</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RAW-PRIVATE-和-RAW-SENOR"><span class="nav-number">1.3.</span> <span class="nav-text">RAW _PRIVATE 和 RAW _SENOR</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
