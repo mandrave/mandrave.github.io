@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原文地址：https://www.jianshu.com/p/4be3d1dafbec  Android N 版本有个新feature，就是普通应用不能直接引用系统的一些so库了，只能直接引用public.libraries.txt文件中过滤的so库。这个网址有介绍怎么处理。 https://source.android.com/devices/tech/config/namespaces_lib">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Framework基础：Android N 公共so库怎么定义呢？">
+<meta property="og:url" content="http://yoursite.com/2019/07/10/公共so库怎么定义呢？/index.html">
+<meta property="og:site_name" content="Hao&#39;Blog">
+<meta property="og:description" content="原文地址：https://www.jianshu.com/p/4be3d1dafbec  Android N 版本有个新feature，就是普通应用不能直接引用系统的一些so库了，只能直接引用public.libraries.txt文件中过滤的so库。这个网址有介绍怎么处理。 https://source.android.com/devices/tech/config/namespaces_lib">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3858093-25fdf796f14180c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3858093-07294bd1bb81a293.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:updated_time" content="2019-07-10T15:53:53.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Framework基础：Android N 公共so库怎么定义呢？">
+<meta name="twitter:description" content="原文地址：https://www.jianshu.com/p/4be3d1dafbec  Android N 版本有个新feature，就是普通应用不能直接引用系统的一些so库了，只能直接引用public.libraries.txt文件中过滤的so库。这个网址有介绍怎么处理。 https://source.android.com/devices/tech/config/namespaces_lib">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3858093-25fdf796f14180c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/10/公共so库怎么定义呢？/"/>
+
+
+
+
+
+  <title>Framework基础：Android N 公共so库怎么定义呢？ | Hao'Blog</title>
+  
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.js?v=5.1.2"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+  
+    
+  
+
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hao'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">你不告而别，我才后知后觉。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photos">
+          <a href="/photos/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            Photos
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/10/公共so库怎么定义呢？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Framework基础：Android N 公共so库怎么定义呢？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T23:45:20+08:00">
+                2019-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文地址：<a href="https://www.jianshu.com/p/4be3d1dafbec" target="_blank" rel="external">https://www.jianshu.com/p/4be3d1dafbec</a></p>
+<blockquote>
+<p>Android N 版本有个新feature，就是普通应用不能直接引用系统的一些so库了，只能直接引用public.libraries.txt文件中过滤的so库。这个网址有介绍怎么处理。<br> <a href="https://link.jianshu.com?t=https://source.android.com/devices/tech/config/namespaces_libraries" target="_blank" rel="external">https://source.android.com/devices/tech/config/namespaces_libraries</a><br> 具体情况是这样的：我有一个系统权限的apk，这个apk会编译出一些so库放在system/lib目录下面，刚刷机这个apk是可以引用到这些so库的，但我调试的时候直接install这个apk，运行的时候居然直接挂了！！我也是醉了。没想到这个新feature居然影响到我的系统权限的apk。真蛋疼，我可不想每次push这个apk然后重启才生效，一般我都是直接install的，但现在好日子貌似到头了。</p>
+</blockquote>
+<h4 id="一-看看报错信息罗"><a href="#一-看看报错信息罗" class="headerlink" title="一.看看报错信息罗"></a>一.看看报错信息罗</h4><p>具体报错的信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">01-01 02:17:24.222  7475  7475 E linker  : library &quot;/system/lib64/libhaha_utils.so&quot; (&quot;/system/lib64/libhaha_utils.so&quot;) needed or dl</div><div class="line">opened by &quot;/system/lib64/libnativeloader.so&quot; is not accessible for the namespace: [name=&quot;classloader-namespace&quot;, ld_library_paths</div><div class="line">=&quot;&quot;, default_library_paths=&quot;/system/fake-libs64:/data/app/com.example.haha-1/base.apk!/lib/arm64-v8a&quot;, permitted_paths=&quot;/dat</div><div class="line">a:/mnt/expand:/data/data/com.example.haha&quot;]</div><div class="line">01-01 02:17:24.223  7475  7475 E System  : java.lang.UnsatisfiedLinkError: dlopen failed: library &quot;/system/lib64/libhaha_utils.so&quot;</div><div class="line"> needed or dlopened by &quot;/system/lib64/libnativeloader.so&quot; is not accessible for the namespace &quot;classloader-namespace&quot;</div></pre></td></tr></table></figure>
+<p>大概的意思就是应用nativeloader打不开libhaha_utils.so这个so库了，就崩溃了！！好残忍。libhaha_utils.so这个库是用我用Android.mk编译后放在system/lib64下面的。但现在打不开了。<br> 为啥呢？<br> 因为/system/lib64/不在APK查找so库的合法路径啊，合法路径有啥呢？<br> 上面log就有说明啦。下面三个路径都没有找到libhaha_utils.so库，所以就挂了。<br> ld_library_paths=””,<br> default_library_paths=”/system/fake-libs64:/data/app/com.example.haha-1/base.apk!/lib/arm64-v8a”, permitted_paths=”/data:/mnt/expand:/data/data/com.example.haha</p>
+<h4 id="二-那为啥刚刷机时APK可以用，Install这个apk后就不能用了呢？"><a href="#二-那为啥刚刷机时APK可以用，Install这个apk后就不能用了呢？" class="headerlink" title="二.那为啥刚刷机时APK可以用，Install这个apk后就不能用了呢？"></a>二.那为啥刚刷机时APK可以用，Install这个apk后就不能用了呢？</h4><p>这个apk可是系统权限的哟，就是apk的清单AndroidManifest中有下面一句<br> android:sharedUserId=”android.uid.system”</p>
+<p>正常来说，这种高端apk的permitted_paths是包含system/lib64的，从源码可以知道<br> /<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/" target="_blank" rel="external">frameworks</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/base/" target="_blank" rel="external">base</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/base/core/" target="_blank" rel="external">core</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/base/core/java/" target="_blank" rel="external">java</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/base/core/java/android/" target="_blank" rel="external">android</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/base/core/java/android/app/" target="_blank" rel="external">app</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/frameworks/base/core/java/android/app/LoadedApk.java" target="_blank" rel="external">LoadedApk.java</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//如果是系统apk并且没有升级过</div><div class="line">final boolean isBundledApp = mApplicationInfo.isSystemApp()</div><div class="line">        &amp;&amp; !mApplicationInfo.isUpdatedSystemApp();</div><div class="line"></div><div class="line">String libraryPermittedPath = mDataDir;</div><div class="line">if (isBundledApp) &#123;   //permitted_paths就增加system/lib64</div><div class="line">    // This is necessary to grant bundled apps access to</div><div class="line">    // libraries located in subdirectories of /system/lib</div><div class="line">    libraryPermittedPath += File.pathSeparator +</div><div class="line">                            System.getProperty(&quot;java.library.path&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看上面的注释就知道啦，如果是系统apk并且没有升级过的话，so库的搜索路径就会增加一个system/lib64。我去，google搞啥呢，为什么还要限定不能升级。<br> 因为install -r来安装apk就相当于升级，所以刷机时apk可以用，install升级后不能用。</p>
+<h3 id="三-那如何解决这个鬼问题呢？"><a href="#三-那如何解决这个鬼问题呢？" class="headerlink" title="三.那如何解决这个鬼问题呢？"></a>三.那如何解决这个鬼问题呢？</h3><p>我纯粹是为了调试方便，所以参考google的链接<br> <a href="https://link.jianshu.com?t=https://source.android.com/devices/tech/config/namespaces_libraries" target="_blank" rel="external">https://source.android.com/devices/tech/config/namespaces_libraries</a></p>
+<p><img src="https:////upload-images.jianshu.io/upload_images/3858093-25fdf796f14180c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="img"></p>
+<p>google.png</p>
+<p> 应用可以调用/vendor/etc/public.libraries.txt和/system/etc/public.libraries.txt里面的所有so库，所以哥往这个文件写入libhaha_utils.so，这个库就变成共用的了，任意应用就可以找到这个so库了，终于可以欢快地使用install apk的方式调试啦！！再也不用重启了！！</p>
+<p> 下面是原生google的图</p>
+<p><img src="https:////upload-images.jianshu.io/upload_images/3858093-07294bd1bb81a293.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="img"></p>
+<p>Paste_Image.png</p>
+<p> 大概有这么些个so库是共用的。</p>
+<p> libandroid.so</p>
+<p> libc.so</p>
+<p> libdl.so</p>
+<p> libEGL.so</p>
+<p> libGLESv1_CM.so</p>
+<p> ……</p>
+<p> 可以看看原生的这笔提交修改的。</p>
+<p><a href="https://android-review.googlesource.com/#/c/209029/" target="_blank" rel="external">https://android-review.googlesource.com/#/c/209029/</a></p>
+<h3 id="四-看看源码这个public-libraries-txt文件是咋玩的"><a href="#四-看看源码这个public-libraries-txt文件是咋玩的" class="headerlink" title="四.看看源码这个public.libraries.txt文件是咋玩的"></a>四.看看源码这个public.libraries.txt文件是咋玩的</h3><p>在这个源码里面用到这个txt文件<br> /<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/" target="_blank" rel="external">system</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/core/" target="_blank" rel="external">core</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/core/libnativeloader/" target="_blank" rel="external">libnativeloader</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/core/libnativeloader/native_loader.cpp" target="_blank" rel="external">native_loader.cpp</a><br> 在LibraryNamespaces类的Initialize()会读取这个文件，将so库设置为公共so库，所谓公共so库，就是这个so库谁都能用啦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">static constexpr const char* kPublicNativeLibrariesSystemConfigPathFromRoot = &quot;/etc/public.libraries.txt&quot;;</div><div class="line">static constexpr const char* kPublicNativeLibrariesVendorConfig = &quot;/vendor/etc/public.libraries.txt&quot;;</div><div class="line">  void Initialize() &#123;</div><div class="line">    ..................</div><div class="line">    std::vector&lt;std::string&gt; sonames;</div><div class="line">    ReadConfig(public_native_libraries_system_config, &amp;sonames, &amp;error_msg),</div><div class="line">    ReadConfig(kPublicNativeLibrariesVendorConfig, &amp;sonames);</div><div class="line">    public_libraries_ = base::Join(sonames, &apos;:&apos;);</div><div class="line">    .............</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这个方法时什么时候调用的呢？大概过下流程罗。<br> 首先在创建一个虚拟机的时候，初始化NativeLoader，这个NativeLoader，顾名思义，就是用来装载so库的。<br> /<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/art/" target="_blank" rel="external">art</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/art/runtime/" target="_blank" rel="external">runtime</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/art/runtime/java_vm_ext.cc" target="_blank" rel="external">java_vm_ext.cc</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">extern &quot;C&quot; jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) &#123;</div><div class="line">  ................</div><div class="line">  // Initialize native loader. This step makes sure we have</div><div class="line">  // everything set up before we start using JNI.</div><div class="line">  android::InitializeNativeLoader();</div><div class="line">  ..............</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后进入native_loader，进行初始化<br> /<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/" target="_blank" rel="external">system</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/core/" target="_blank" rel="external">core</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/core/libnativeloader/" target="_blank" rel="external">libnativeloader</a>/<a href="https://link.jianshu.com?t=http://androidxref.com/7.1.1_r6/xref/system/core/libnativeloader/native_loader.cpp" target="_blank" rel="external">native_loader.cpp</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">static LibraryNamespaces* g_namespaces = new LibraryNamespaces;</div><div class="line"></div><div class="line">void InitializeNativeLoader() &#123;</div><div class="line">  g_namespaces-&gt;Initialize();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>初始化是调用LibraryNamespaces类的Initialize完成公共so库的赋值，哈哈哈，搞定！！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">void Initialize() &#123;</div><div class="line">  ..................</div><div class="line">  std::vector&lt;std::string&gt; sonames;</div><div class="line">  ReadConfig(public_native_libraries_system_config, &amp;sonames, &amp;error_msg),</div><div class="line">  ReadConfig(kPublicNativeLibrariesVendorConfig, &amp;sonames);</div><div class="line">  public_libraries_ = base::Join(sonames, &apos;:&apos;);</div><div class="line">  .............</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>总结：<br> 1.Android N 不能直接调用系统的一些私有库了，公用的库都定义在public.libraries.txt里面。<br> 2.系统应用刚刷机是能够调用system/lib64下的库，但通过install升级该应用时，应用打开会挂。因为升级后permitted_paths就不再包含system/lib64了。所以我们可以将apk要用到的库名称写到public.libraries.txt中去解决快速调试问题。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/10/Android 7.0 行为变更-应用链接至平台库/" rel="next" title="Android7.0行为变更-应用链接至平台库">
+                <i class="fa fa-chevron-left"></i> Android7.0行为变更-应用链接至平台库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">Hao</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一-看看报错信息罗"><span class="nav-number">1.</span> <span class="nav-text">一.看看报错信息罗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二-那为啥刚刷机时APK可以用，Install这个apk后就不能用了呢？"><span class="nav-number">2.</span> <span class="nav-text">二.那为啥刚刷机时APK可以用，Install这个apk后就不能用了呢？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三-那如何解决这个鬼问题呢？"><span class="nav-number"></span> <span class="nav-text">三.那如何解决这个鬼问题呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四-看看源码这个public-libraries-txt文件是咋玩的"><span class="nav-number"></span> <span class="nav-text">四.看看源码这个public.libraries.txt文件是咋玩的</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

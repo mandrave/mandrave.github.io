@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原文地址：https://developer.android.google.cn/about/versions/nougat/android-7.0-changes 从 Android 7.0 开始，系统将阻止应用动态链接非公开 NDK 库，这种库可能会导致您的应用崩溃。此行为变更旨在为跨平台更新和不同设备提供统一的应用体验。即使您的代码可能不会链接私有库，但您的应用中的第三方静态库可能会这么做。">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android7.0行为变更-应用链接至平台库">
+<meta property="og:url" content="http://yoursite.com/2019/07/10/Android 7.0 行为变更-应用链接至平台库/index.html">
+<meta property="og:site_name" content="Hao&#39;Blog">
+<meta property="og:description" content="原文地址：https://developer.android.google.cn/about/versions/nougat/android-7.0-changes 从 Android 7.0 开始，系统将阻止应用动态链接非公开 NDK 库，这种库可能会导致您的应用崩溃。此行为变更旨在为跨平台更新和不同设备提供统一的应用体验。即使您的代码可能不会链接私有库，但您的应用中的第三方静态库可能会这么做。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-10T15:50:21.598Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android7.0行为变更-应用链接至平台库">
+<meta name="twitter:description" content="原文地址：https://developer.android.google.cn/about/versions/nougat/android-7.0-changes 从 Android 7.0 开始，系统将阻止应用动态链接非公开 NDK 库，这种库可能会导致您的应用崩溃。此行为变更旨在为跨平台更新和不同设备提供统一的应用体验。即使您的代码可能不会链接私有库，但您的应用中的第三方静态库可能会这么做。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/10/Android 7.0 行为变更-应用链接至平台库/"/>
+
+
+
+
+
+  <title>Android7.0行为变更-应用链接至平台库 | Hao'Blog</title>
+  
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.js?v=5.1.2"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+  
+    
+  
+
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hao'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">你不告而别，我才后知后觉。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photos">
+          <a href="/photos/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            Photos
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/10/Android 7.0 行为变更-应用链接至平台库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android7.0行为变更-应用链接至平台库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T23:36:25+08:00">
+                2019-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文地址：<a href="https://developer.android.google.cn/about/versions/nougat/android-7.0-changes" target="_blank" rel="external">https://developer.android.google.cn/about/versions/nougat/android-7.0-changes</a></p>
+<p>从 Android 7.0 开始，系统将阻止应用动态链接非公开 NDK 库，这种库可能会导致您的应用崩溃。此行为变更旨在为跨平台更新和不同设备提供统一的应用体验。即使您的代码可能不会链接私有库，但您的应用中的第三方静态库可能会这么做。因此，所有开发者都应进行相应检查，确保他们的应用不会在运行 Android 7.0 的设备上崩溃。如果您的应用使用原生代码，则只能使用<a href="https://developer.android.google.cn/ndk/guides/stable_apis.html" target="_blank" rel="external">公开 NDK API</a>。</p>
+<p>您的应用可通过以下三种方式尝试访问私有平台 API：</p>
+<ul>
+<li>您的应用直接访问私有平台库。您应更新您的应用以添加该应用的库副本，或使用<a href="https://developer.android.google.cn/ndk/guides/stable_apis.html" target="_blank" rel="external">公开 NDK API</a>。</li>
+<li>您的应用使用一个可访问私有平台库的第三方库。即使您确定您的应用不会直接访问私有库，您仍应针对此情景测试您的应用。</li>
+<li>您的应用引用一个其 APK 中未包含的库。例如，如果您尝试使用您自己的 OpenSSL 副本，但忘记将它与应用的 APK 进行捆绑，则可能会出现此情况。正常情况下，此应用可在包含 <code>libcrypto.so</code> 的 Android 平台版本上运行。不过，此应用在不包含此库的新版 Android（例如，Android 6.0 和更高的版本）上会崩溃。为修复此问题，请确保您的 APK 捆绑您的所有非 NDK 库。</li>
+</ul>
+<p>应用不应使用 NDK 中未包含的原生库，因为这些库可能会发生更改或在不同 Android 版本之间的可用性不同。例如，从 OpenSSL 切换至 BoringSSL 即属于此类更改。此外，由于不属于 NDK 中的平台库没有兼容性要求，因此不同的设备可能提供不同级别的兼容性。</p>
+<p>为降低此限制可能对当前发布的应用的影响，面向 API 级别 23 或更低级别的应用在 Android N 上可暂时访问颇为常用的一组库，例如 <code>libandroid_runtime.so</code>、<code>libcutils.so</code>、<code>libcrypto.so</code> 和 <code>libssl.so</code>。如果您的应用加载其中某个库，logcat 会生成一个警告，并在目标设备上显示一个 Toast 来通知您。如果您看到这些警告，您应更新您的应用以添加该应用自己的库副本，或仅使用公开 NDK API。将来发布的 Android 平台可能会完全限制对私有库的使用，并导致您的应用崩溃。</p>
+<p>所有应用在调用既非公开又不可暂时访问的 API 时都会生成一个运行时错误。结果就是 <code>System.loadLibrary</code> 和 <code>dlopen(3)</code> 同时返回 <code>NULL</code>，并可能导致您的应用崩溃。您应检查应用代码以移除对私有平台 API 的使用，并使用预览版设备或模拟器全面测试应用。如果您不确定您的应用是否使用私有库，您可以<a href="https://developer.android.google.cn/about/versions/nougat/android-7.0-changes#ndk-errors" target="_blank" rel="external">检查 logcat</a> 以识别运行时错误。</p>
+<p>下表描述的是根据应用使用的私有原生库及其目标 API 级别 (<code>android:targetSdkVersion</code>)，应用预期显示的行为。</p>
+<table>
+<thead>
+<tr>
+<th>库</th>
+<th>目标 API 级别</th>
+<th>通过动态链接器进行运行时访问</th>
+<th>N Developer Preview 行为</th>
+<th>最终 Android N 版本行为</th>
+<th>未来的 Android 平台行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>公开 NDK</td>
+<td>任意</td>
+<td>可访问</td>
+<td>合乎预期</td>
+<td>合乎预期</td>
+<td>合乎预期</td>
+</tr>
+<tr>
+<td>私有（暂时可访问的私有库）</td>
+<td>23 或更低</td>
+<td>暂时可访问</td>
+<td>合乎预期，但您会在目标设备上收到一个 logcat 警告和一条消息。</td>
+<td>合乎预期，但您会收到一个 logcat 警告。</td>
+<td>运行时错误</td>
+</tr>
+<tr>
+<td>私有（暂时可访问的私有库）</td>
+<td>24 或更高</td>
+<td>受限</td>
+<td>运行时错误</td>
+<td>运行时错误</td>
+<td>运行时错误</td>
+</tr>
+<tr>
+<td>私有（其他）</td>
+<td>任意</td>
+<td>受限</td>
+<td>运行时错误</td>
+<td>运行时错误</td>
+<td>运行时错误</td>
+</tr>
+</tbody>
+</table>
+<p>检查您的应用是否使用私有库 </p>
+<p>为帮助您识别加载私有库的问题，logcat 可能会生成一个警告或运行时错误。例如，如果您的应用面向 API 级别 23 或更低级别，并在运行 Android 7.0 的设备上尝试访问私有库，您可能会看到一个类似于下面所示的警告：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">03-21 17:07:51.502 31234 31234 W linker  : library &quot;libandroid_runtime.so&quot;</div><div class="line">(&quot;/system/lib/libandroid_runtime.so&quot;) needed or dlopened by</div><div class="line">&quot;/data/app/com.popular-app.android-2/lib/arm/libapplib.so&quot; is not accessible</div><div class="line">for the namespace &quot;classloader-namespace&quot; - the access is temporarily granted</div><div class="line">as a workaround for http://b/26394120</div></pre></td></tr></table></figure>
+<p>这些 logcat 警告通知您哪个库正在尝试访问私有平台 API，但不会导致您的应用崩溃。但是，如果应用面向 API 级别 24 或更高级别，logcat 会生成以下运行时错误，您的应用可能会崩溃：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">java.lang.UnsatisfiedLinkError: dlopen failed: library &quot;libcutils.so&quot;</div><div class="line">(&quot;/system/lib/libcutils.so&quot;) needed or dlopened by</div><div class="line">&quot;/system/lib/libnativeloader.so&quot; is not accessible for the namespace</div><div class="line">&quot;classloader-namespace&quot;</div><div class="line">  at java.lang.Runtime.loadLibrary0(Runtime.java:977)</div><div class="line">  at java.lang.System.loadLibrary(System.java:1602)</div></pre></td></tr></table></figure>
+<p>如果您的应用使用动态链接到私有平台 API 的第三方库，您可能也会看到上述 logcat 输出。利用 Android 7.0DK 中的 readelf 工具，您可以通过运行以下命令生成给定 <code>.so</code> 文件的所有动态链接的共享库列表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">aarch64-linux-android-readelf -dW libMyLibrary.so</div></pre></td></tr></table></figure>
+<p>更新您的应用 </p>
+<p>通过下面的一些步骤，您可以修复上述类型的错误并确保您的应用不会在将来的更新版平台上崩溃：</p>
+<ul>
+<li><p>如果您的应用使用私有平台库，您应更新它，以添加该应用自己的库副本或使用<a href="https://developer.android.google.cn/ndk/guides/stable_apis.html" target="_blank" rel="external">公开 NDK API</a>。</p>
+</li>
+<li><p>如果您的应用使用访问私有符号的第三方库，则联系库作者以更新库。</p>
+</li>
+<li><p>请确保将您的所有非 NDK 库与您的 APK 打包在一起。</p>
+</li>
+<li><p>使用标准 JNI 函数而非来自libandroid_runtime.so的getJavaVM和getJNIEnv：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">AndroidRuntime::getJavaVM -&gt; GetJavaVM from &lt;jni.h&gt;</div><div class="line">AndroidRuntime::getJNIEnv -&gt; JavaVM::GetEnv or</div><div class="line">JavaVM::AttachCurrentThread from &lt;jni.h&gt;.</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>使用__system_property_get而非来自libcutils.so的私有property_get符号。为此，请使用</p>
+<p>__system_property_get及以下 include 函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#include &lt;sys/system_properties.h&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>  <strong>注</strong>：系统属性的可用性和内容未通过 CTS 进行测试。应执行进一步修复以避免同时使用这些属性。</p>
+<ul>
+<li>使用来自 <code>libcrypto.so</code> 的 <code>SSL_ctrl</code> 符号的本地版本。例如，您应在您的 <code>.so</code> 文件中静态链接 <code>libcyrpto.a</code>，或从 BoringSSL/OpenSSL 添加一个动态链接的 <code>libcrypto.so</code> 版本，并将其打包到您的 APK 中。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/20/达芬奇一生的成就/" rel="next" title="达芬奇一生的成就">
+                <i class="fa fa-chevron-left"></i> 达芬奇一生的成就
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/10/公共so库怎么定义呢？/" rel="prev" title="Framework基础：Android N 公共so库怎么定义呢？">
+                Framework基础：Android N 公共so库怎么定义呢？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">Hao</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
