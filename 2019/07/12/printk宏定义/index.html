@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="达芬奇," />
+  <meta name="keywords" content="Linux Kernel," />
 
 
 
@@ -95,17 +95,18 @@
 
 
 
-<meta name="keywords" content="达芬奇">
+<meta name="description" content="控制log输出的方法 1234#if 1	#define pr_debug(x,...) printk(x, ##__VA_ARGS__)#else	#define pr_debug(x,...) do &amp;#123;&amp;#125; while(0) 通过C语言的宏定义控制log的输出，使用VA_ARGS获取可变参数。 1#define pr_debug(x,...) printk(x, __VA_A">
+<meta name="keywords" content="Linux Kernel">
 <meta property="og:type" content="article">
-<meta property="og:title" content="达芬奇一生的成就">
-<meta property="og:url" content="http://yoursite.com/2019/05/20/达芬奇一生的成就/index.html">
+<meta property="og:title" content="printk宏定义">
+<meta property="og:url" content="http://yoursite.com/2019/07/12/printk宏定义/index.html">
 <meta property="og:site_name" content="Hao&#39;Blog">
+<meta property="og:description" content="控制log输出的方法 1234#if 1	#define pr_debug(x,...) printk(x, ##__VA_ARGS__)#else	#define pr_debug(x,...) do &amp;#123;&amp;#125; while(0) 通过C语言的宏定义控制log的输出，使用VA_ARGS获取可变参数。 1#define pr_debug(x,...) printk(x, __VA_A">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://blog-pic-image.oss-cn-shanghai.aliyuncs.com/pics/2A630F17AAD849A2BD307F7BBF8F9C30.jpeg">
-<meta property="og:updated_time" content="2019-05-20T14:29:55.908Z">
+<meta property="og:updated_time" content="2019-07-12T15:33:59.146Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="达芬奇一生的成就">
-<meta name="twitter:image" content="https://blog-pic-image.oss-cn-shanghai.aliyuncs.com/pics/2A630F17AAD849A2BD307F7BBF8F9C30.jpeg">
+<meta name="twitter:title" content="printk宏定义">
+<meta name="twitter:description" content="控制log输出的方法 1234#if 1	#define pr_debug(x,...) printk(x, ##__VA_ARGS__)#else	#define pr_debug(x,...) do &amp;#123;&amp;#125; while(0) 通过C语言的宏定义控制log的输出，使用VA_ARGS获取可变参数。 1#define pr_debug(x,...) printk(x, __VA_A">
 
 
 
@@ -135,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/20/达芬奇一生的成就/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/12/printk宏定义/"/>
 
 
 
 
 
-  <title>达芬奇一生的成就 | Hao'Blog</title>
+  <title>printk宏定义 | Hao'Blog</title>
   
 
 
@@ -291,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/20/达芬奇一生的成就/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/printk宏定义/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hao">
@@ -308,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">达芬奇一生的成就</h1>
+          <h1 class="post-title" itemprop="name headline">printk宏定义</h1>
         
 
         <div class="post-meta">
@@ -320,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-20T22:25:58+08:00">
-                2019-05-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T23:32:06+08:00">
+                2019-07-12
               </time>
             
 
@@ -330,28 +331,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/人物/" itemprop="url" rel="index">
-                    <span itemprop="name">人物</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -380,8 +359,14 @@
       
 
       
-        <p><img src="https://blog-pic-image.oss-cn-shanghai.aliyuncs.com/pics/2A630F17AAD849A2BD307F7BBF8F9C30.jpeg" alt=""></p>
-
+        <p>控制log输出的方法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></div><div class="line">	<span class="meta">#<span class="meta-keyword">define</span> pr_debug(x,...) printk(x, ##__VA_ARGS__)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line">	<span class="meta">#<span class="meta-keyword">define</span> pr_debug(x,...) do &#123;&#125; while(0)</span></div></pre></td></tr></table></figure>
+<p>通过C语言的宏定义控制log的输出，使用<strong>VA_ARGS</strong>获取可变参数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> pr_debug(x,...) printk(x, __VA_ARGS__)</span></div></pre></td></tr></table></figure>
+<p>使用如下方式调用，则会产生编译错误。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pr_debug(<span class="string">"hello world"</span>);</div></pre></td></tr></table></figure>
+<p>产生编译错误的原因是<strong>VA_ARGS</strong>宏不支持可变参数个数为0的情况，C99规范并没有定义其他的宏来解决这个问题，但GCC对此作了扩展，在<strong>VA_ARGS</strong>前面加两个#。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> pr_debug(x,...) printk(x, ##__VA_ARGS__)</span></div></pre></td></tr></table></figure>
       
     </div>
     
@@ -398,7 +383,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/达芬奇/" rel="tag"># 达芬奇</a>
+            <a href="/tags/Linux-Kernel/" rel="tag"># Linux Kernel</a>
           
         </div>
       
@@ -411,8 +396,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/20/JavaBean简介/" rel="next" title="JavaBean简介">
-                <i class="fa fa-chevron-left"></i> JavaBean简介
+              <a href="/2019/07/11/Android上使用libOpenCL-so/" rel="next" title="Android上使用libOpenCL.so">
+                <i class="fa fa-chevron-left"></i> Android上使用libOpenCL.so
               </a>
             
           </div>
@@ -420,10 +405,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/10/Android 7.0 行为变更-应用链接至平台库/" rel="prev" title="Android7.0行为变更-应用链接至平台库">
-                Android7.0行为变更-应用链接至平台库 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
