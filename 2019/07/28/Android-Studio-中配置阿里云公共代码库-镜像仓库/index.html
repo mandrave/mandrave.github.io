@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JavaBean," />
+  <meta name="keywords" content="Android Studio," />
 
 
 
@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="转载自https://www.runoob.com/jsp/jsp-javabean.html JavaBean是特殊的Java类，使用J ava语言书写，并且遵守JavaBean API规范。 接下来给出的是JavaBean与其它Java类相比而言独一无二的特征：  提供一个默认的无参构造函数。 需要被序列化并且实现了Serializable接口。 可能有一系列可读写属性。 可能有一系列的”ge">
-<meta name="keywords" content="JavaBean">
+<meta name="description" content="在使用android studio的时候，gradle总是出现奇怪的问题，换成阿里的仓库后就解决了，找到一篇写的很详细的文章记录下来。原文如下：  Android 开发中最常见的问题之一就是 Gradle插件和三方库依赖包无法下载或下载十分缓慢，如AndroidStudio导入项目时一直卡在 Building gradle project info 的问题，这些由于【墙】引起的问题，也是本文要解决">
+<meta name="keywords" content="Android Studio">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaBean简介">
-<meta property="og:url" content="http://yoursite.com/2019/05/20/JavaBean简介/index.html">
+<meta property="og:title" content="Android Studio 中配置阿里云公共代码库(镜像仓库)">
+<meta property="og:url" content="http://yoursite.com/2019/07/28/Android-Studio-中配置阿里云公共代码库-镜像仓库/index.html">
 <meta property="og:site_name" content="Hao&#39;Blog">
-<meta property="og:description" content="转载自https://www.runoob.com/jsp/jsp-javabean.html JavaBean是特殊的Java类，使用J ava语言书写，并且遵守JavaBean API规范。 接下来给出的是JavaBean与其它Java类相比而言独一无二的特征：  提供一个默认的无参构造函数。 需要被序列化并且实现了Serializable接口。 可能有一系列可读写属性。 可能有一系列的”ge">
+<meta property="og:description" content="在使用android studio的时候，gradle总是出现奇怪的问题，换成阿里的仓库后就解决了，找到一篇写的很详细的文章记录下来。原文如下：  Android 开发中最常见的问题之一就是 Gradle插件和三方库依赖包无法下载或下载十分缓慢，如AndroidStudio导入项目时一直卡在 Building gradle project info 的问题，这些由于【墙】引起的问题，也是本文要解决">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-13T15:32:04.884Z">
+<meta property="og:updated_time" content="2019-07-28T10:21:53.650Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaBean简介">
-<meta name="twitter:description" content="转载自https://www.runoob.com/jsp/jsp-javabean.html JavaBean是特殊的Java类，使用J ava语言书写，并且遵守JavaBean API规范。 接下来给出的是JavaBean与其它Java类相比而言独一无二的特征：  提供一个默认的无参构造函数。 需要被序列化并且实现了Serializable接口。 可能有一系列可读写属性。 可能有一系列的”ge">
+<meta name="twitter:title" content="Android Studio 中配置阿里云公共代码库(镜像仓库)">
+<meta name="twitter:description" content="在使用android studio的时候，gradle总是出现奇怪的问题，换成阿里的仓库后就解决了，找到一篇写的很详细的文章记录下来。原文如下：  Android 开发中最常见的问题之一就是 Gradle插件和三方库依赖包无法下载或下载十分缓慢，如AndroidStudio导入项目时一直卡在 Building gradle project info 的问题，这些由于【墙】引起的问题，也是本文要解决">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/20/JavaBean简介/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/28/Android-Studio-中配置阿里云公共代码库-镜像仓库/"/>
 
 
 
 
 
-  <title>JavaBean简介 | Hao'Blog</title>
+  <title>Android Studio 中配置阿里云公共代码库(镜像仓库) | Hao'Blog</title>
   
 
 
@@ -292,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/20/JavaBean简介/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/28/Android-Studio-中配置阿里云公共代码库-镜像仓库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hao">
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JavaBean简介</h1>
+          <h1 class="post-title" itemprop="name headline">Android Studio 中配置阿里云公共代码库(镜像仓库)</h1>
         
 
         <div class="post-meta">
@@ -321,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-20T21:58:17+08:00">
-                2019-05-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-28T18:05:43+08:00">
+                2019-07-28
               </time>
             
 
@@ -344,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -381,38 +381,27 @@
       
 
       
-        <p>转载自<a href="https://www.runoob.com/jsp/jsp-javabean.html" target="_blank" rel="external">https://www.runoob.com/jsp/jsp-javabean.html</a></p>
-<p>JavaBean是特殊的Java类，使用J ava语言书写，并且遵守JavaBean API规范。</p>
-<p>接下来给出的是JavaBean与其它Java类相比而言独一无二的特征：</p>
-<ul>
-<li>提供一个默认的无参构造函数。</li>
-<li>需要被序列化并且实现了Serializable接口。</li>
-<li>可能有一系列可读写属性。</li>
-<li>可能有一系列的”getter”或”setter”方法。</li>
+        <p>在使用android studio的时候，gradle总是出现奇怪的问题，换成阿里的仓库后就解决了，找到一篇写的很详细的文章记录下来。<br>原文如下：</p>
+<hr>
+<p>Android 开发中最常见的问题之一就是 Gradle插件和三方库依赖包无法下载或下载十分缓慢，如AndroidStudio导入项目时一直卡在 Building gradle project info 的问题，这些由于【墙】引起的问题，也是本文要解决两个难题。虽然我们可以通过翻墙解决，但指不定什么时间就行不通了。阿里云镜像的方式是个不错的替代选择，不仅行得通，还能够大幅度提高工程构建速度。</p>
+<h1 id="如何配置"><a href="#如何配置" class="headerlink" title="如何配置"></a>如何配置</h1><p>配置其实很简单，参照 阿里云官方配置指南,将项目根目录下的 build.gradle 文件相应部分替换即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line"></div><div class="line">    repositories &#123;</div><div class="line"></div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/central&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/google&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/gradle-plugin&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/jcenter&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/public&apos; &#125;</div><div class="line">        </div><div class="line">        mavenLocal()</div><div class="line"></div><div class="line">        google()</div><div class="line">        jcenter()</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">    		//这里版本根据自己项目而定</div><div class="line">        classpath &apos;com.android.tools.build:gradle:3.2.1&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">allprojects &#123;</div><div class="line">    repositories &#123;</div><div class="line"></div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/central&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/google&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/gradle-plugin&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/jcenter&apos; &#125;</div><div class="line">        maven &#123; url &apos;https://maven.aliyun.com/repository/public&apos; &#125;</div><div class="line">    </div><div class="line">        mavenLocal()</div><div class="line">        google()</div><div class="line">        jcenter()</div><div class="line">        maven &#123;</div><div class="line">            url &apos;https://jitpack.io&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>由于查找相应库的顺序是从前到后，所以即使重复配置也是可行的，可以看到，我这里</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">maven &#123; url &apos;https://maven.aliyun.com/repository/google&apos; &#125;</div><div class="line">maven &#123; url &apos;https://maven.aliyun.com/repository/jcenter&apos; &#125; </div><div class="line">与</div><div class="line"></div><div class="line">google()  </div><div class="line">jcenter()</div></pre></td></tr></table></figure>
+<p>其实是重复的,防止在前者中找不到。关于这些仓库的区别，在[参考]中可找到。 配置简单，但实际操作中可能会遇到不少问题。</p>
+<h1 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h1><h2 id="1-代理配置问题"><a href="#1-代理配置问题" class="headerlink" title="1.代理配置问题"></a>1.代理配置问题</h2><p>在更换为阿里云镜像之前，我们很可能启用了FQ软件，可能Android Studio 中配置了代理，如果你的报错信息中带有类似127.0.1之类的文字，你首先要解决的就是取消代理设置：</p>
+<p>Appearance&amp;Behavior -&gt; System Setting -&gt; HTTP Proxy 设为No Proxy ；<br>保证工程根目录下的 gradle.properties 的代理设置已经去掉；<br>检查系统Gradle配置文件.gradle/gradle.properties中的代理配置已经去掉。注：mac 下 在/Users/用户名/.gradle/gradle.properties windows下 在C:\Users\Administrator.gradle\gradle.properties</p>
+<h2 id="2-部分依赖库找不到报错"><a href="#2-部分依赖库找不到报错" class="headerlink" title="2.部分依赖库找不到报错"></a>2.部分依赖库找不到报错</h2><p>更换后，我们可能会发现，大部分库都已经下载了，但是有少部分库依然报红色错误，这很可能是阿里云仓库中没有相应的库。解决方法，可参照上面配置，将原库加上，阿里云找不到就在原库中找。</p>
+<h2 id="3-改后发现不奏效，无反应等"><a href="#3-改后发现不奏效，无反应等" class="headerlink" title="3.改后发现不奏效，无反应等"></a>3.改后发现不奏效，无反应等</h2><p>build -&gt; clean project；<br>file -&gt; invalidate caches / restart 两个万能操作，哪个好使用哪个。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://help.aliyun.com/document_detail/102512.html?spm=a2c40.aliyun_maven_repo.0.0.361830543mJYeQ" target="_blank" rel="external">阿里云指南</a></li>
+<li><a href="https://maven.aliyun.com/mvn/view" target="_blank" rel="external">仓库地址及目录</a></li>
+<li><a href="https://services.gradle.org/distributions/" target="_blank" rel="external">Gradle仓库目录</a></li>
+<li><a href="https://developer.android.com/studio/releases/gradle-plugin.html" target="_blank" rel="external">Gradle与Gradle warper 版本对照</a></li>
+<li><a href="https://www.jianshu.com/p/b038bd95444b" target="_blank" rel="external">Android Studio阿里镜像配置</a></li>
+<li><a href="https://stackoverflow.com/questions/50726435/difference-among-mavencentral-jcenter-and-mavenlocal/50726436" target="_blank" rel="external">Difference among mavenCentral(), jCenter() and mavenLocal()?</a></li>
 </ul>
-<h2 id="JavaBean属性"><a href="#JavaBean属性" class="headerlink" title="JavaBean属性"></a>JavaBean属性</h2><p>一个JavaBean对象的属性应该是可访问的。这个属性可以是任意合法的Java数据类型，包括自定义Java类。</p>
-<p>一个JavaBean对象的属性可以是可读写，或只读，或只写。JavaBean对象的属性通过JavaBean实现类中提供的两个方法来访问：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"><strong>方法</strong></th>
-<th style="text-align:left"><strong>描述</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">get<strong>PropertyName</strong>()</td>
-<td style="text-align:left">举例来说，如果属性的名称为myName，那么这个方法的名字就要写成getMyName()来读取这个属性。这个方法也称为访问器。</td>
-</tr>
-<tr>
-<td style="text-align:left">set<strong>PropertyName</strong>()</td>
-<td style="text-align:left">举例来说，如果属性的名称为myName，那么这个方法的名字就要写成setMyName()来写入这个属性。这个方法也称为写入器。</td>
-</tr>
-</tbody>
-</table>
-<p>一个只读的属性只提供getPropertyName()方法，一个只写的属性只提供setPropertyName()方法。</p>
-<h2 id="JavaBean-程序示例"><a href="#JavaBean-程序示例" class="headerlink" title="JavaBean 程序示例"></a>JavaBean 程序示例</h2><p>这是StudentBean.java文件：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.runoob;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentsBean</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">   <span class="keyword">private</span> String firstName = <span class="keyword">null</span>;</div><div class="line">   <span class="keyword">private</span> String lastName = <span class="keyword">null</span>;</div><div class="line">   <span class="keyword">private</span> <span class="keyword">int</span> age = <span class="number">0</span>;</div><div class="line"></div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="title">StudentsBean</span><span class="params">()</span> </span>&#123;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</div><div class="line">      <span class="keyword">return</span> firstName;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</div><div class="line">      <span class="keyword">return</span> lastName;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span></span>&#123;</div><div class="line">      <span class="keyword">return</span> age;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstName</span><span class="params">(String firstName)</span></span>&#123;</div><div class="line">      <span class="keyword">this</span>.firstName = firstName;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span></span>&#123;</div><div class="line">      <span class="keyword">this</span>.lastName = lastName;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">      <span class="keyword">this</span>.age = age;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>原文地址(复制后在浏览器中打开)：</p>
+<p><a href="http://dkaishu.com/2019/06/01/Android-Studio-%E4%B8%AD%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91%E5%85%AC%E5%85%B1%E4%BB%A3%E7%A0%81%E5%BA%93(%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93" target="_blank" rel="external">http://dkaishu.com/2019/06/01/Android-Studio-%E4%B8%AD%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91%E5%85%AC%E5%85%B1%E4%BB%A3%E7%A0%81%E5%BA%93(%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93</a>)</p>
 
       
     </div>
@@ -430,7 +419,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JavaBean/" rel="tag"># JavaBean</a>
+            <a href="/tags/Android-Studio/" rel="tag"># Android Studio</a>
           
         </div>
       
@@ -443,8 +432,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/23/什么是HIDL/" rel="next" title="什么是HIDL">
-                <i class="fa fa-chevron-left"></i> 什么是HIDL
+              <a href="/2019/07/15/OpenCL-Dump device info/" rel="next" title="OpenCL-Dump device info">
+                <i class="fa fa-chevron-left"></i> OpenCL-Dump device info
               </a>
             
           </div>
@@ -452,10 +441,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/20/达芬奇一生的成就/" rel="prev" title="达芬奇一生的成就">
-                达芬奇一生的成就 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -588,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaBean属性"><span class="nav-number">1.</span> <span class="nav-text">JavaBean属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaBean-程序示例"><span class="nav-number">2.</span> <span class="nav-text">JavaBean 程序示例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何配置"><span class="nav-number">1.</span> <span class="nav-text">如何配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见错误"><span class="nav-number">2.</span> <span class="nav-text">常见错误</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-代理配置问题"><span class="nav-number">2.1.</span> <span class="nav-text">1.代理配置问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-部分依赖库找不到报错"><span class="nav-number">2.2.</span> <span class="nav-text">2.部分依赖库找不到报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-改后发现不奏效，无反应等"><span class="nav-number">2.3.</span> <span class="nav-text">3.改后发现不奏效，无反应等</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
